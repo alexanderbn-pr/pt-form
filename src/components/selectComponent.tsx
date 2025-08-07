@@ -22,7 +22,7 @@ function SelectComponent({
         required
       >
         <option value="" disabled>
-          - Selecciona una opción -
+          -- Selecciona una opción --
         </option>
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>

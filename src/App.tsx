@@ -5,18 +5,14 @@ import {
   Navigate,
 } from 'react-router-dom';
 
-import Accommodation from './pages/accommodation/accommodation';
-import Owner from './pages/owner/owner';
-import Resume from './pages/resume/resume';
+import MultiStepForm from './components/multiStepForm/multiStepForm';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/accommodation" replace />} />
-        <Route path="/accommodation" element={<Accommodation />} />
-        <Route path="/owner" element={<Owner />} />
-        <Route path="/resume" element={<Resume />} />
+        <Route path="/" element={<Navigate to="/reserve" replace />} />
+        <Route path="/reserve" element={<MultiStepForm />} />
       </Routes>
     </Router>
   );

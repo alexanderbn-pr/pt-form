@@ -4,17 +4,20 @@ export interface AccommodationValues {
   name: string;
   address: string;
   description: string;
+  type: string;
 }
 
 export interface AccommodationErrors {
   name?: string;
   address?: string;
   description?: string;
+  type?: string;
 }
 
 export function useValidationAccommodation(initialValues: AccommodationValues) {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<AccommodationErrors>({});
+  const [type, setType] = useState('');
   const [touched, setTouched] = useState<{
     [K in keyof AccommodationValues]?: boolean;
   }>({});
@@ -45,6 +48,10 @@ export function useValidationAccommodation(initialValues: AccommodationValues) {
       }
     }
 
+    if (!type) {
+      errs.type = 'Type is required.';
+    }
+
     return errs;
   };
 
@@ -69,5 +76,7 @@ export function useValidationAccommodation(initialValues: AccommodationValues) {
     handleBlur,
     isValid,
     setValues,
+    setType,
+    type,
   };
 }
