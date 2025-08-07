@@ -1,10 +1,8 @@
-import React from 'react';
-
 function Owner() {
   
   return (
     <main>
-     
+      <p>Owner</p>
     </main>
   );
 }

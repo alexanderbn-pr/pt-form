@@ -1,10 +1,7 @@
-import React from 'react';
-
 function Resume() {
-  
   return (
     <main>
-     
+      <p>Resume</p>
     </main>
   );
 }
