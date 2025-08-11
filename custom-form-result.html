@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Custom Form Result</title>
+  </head>
+  <body>
+    <multi-step-form></multi-step-form>
+
+    <script type="module" src="/src/wrapper/multiStepFormWrapper.tsx"></script>
+    <script>
+      document
+        .querySelector('multi-step-form')
+        .addEventListener('formSubmit', (e) => {
+          console.log('Datos recibidos:', e.detail);
+        });
+    </script>
+  </body>
+</html>
