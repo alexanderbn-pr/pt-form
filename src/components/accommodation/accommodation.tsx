@@ -1,59 +1,77 @@
-import React, { useState } from 'react';
-import { Photo } from '../../types';
-import InputComponent from '../../components/inputComponent';
-import SelectComponent from '../../components/selectComponent';
-import { TYPE_OPTIONS } from '../../constants';
-import { useValidationAccommodation } from '../../hooks/useValidationAccommodation';
+import InputComponent from '../inputComponent';
+import SelectComponent from '../selectComponent';
+import PhotoComponent from '../photoComponent';
+import {
+  TYPE_OPTIONS,
+  MAX_IMAGE_PX,
+  ACCEPTED_IMAGE_TYPES,
+  MAX_PHOTOS,
+} from '../../constants';
+import { AccommodationValues, AccommodationErrors, Photo } from '../../types';
 
 interface Props {
-  setStep: (step: number) => void;
+  handleSubmit: (e: React.FormEvent, step: number) => void;
+  values: AccommodationValues;
+  errors: AccommodationErrors;
+  touched: Partial<Record<keyof AccommodationValues, boolean>>;
+  handleChange: (field: keyof AccommodationValues, value: string) => void;
+  handleBlur: (field: keyof AccommodationValues) => void;
+  isValid: boolean;
+  type: string;
+  setType: (value: string) => void;
+  handleAddPhotos: (files: FileList | File[]) => void;
+  photos: Photo[];
 }
 
-function Accommodation({ setStep }: Props) {
-  const [photos, setPhotos] = useState<Photo[]>([
-    { id: 1, label: 'Photo 1', color: 'bg-red-100 border-red-300' },
-    { id: 2, label: 'Photo 2', color: 'bg-green-100 border-green-300' },
-  ]);
+function Accommodation({
+  handleSubmit,
+  values,
+  errors,
+  touched,
+  handleChange,
+  handleBlur,
+  isValid,
+  type,
+  setType,
+  handleAddPhotos,
+  photos,
+}: Props) {
+  const onFilesSelected: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const inputEl = e.currentTarget;
+    const fileList = inputEl.files;
+    if (!fileList) return;
 
-  const {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    isValid,
-    type,
-    setType,
-  } = useValidationAccommodation({
-    name: '',
-    address: '',
-    description: '',
-    type: '',
-  });
+    const files = Array.from(fileList);
+    const validFiles: File[] = [];
+    let processed = 0;
 
-  const handleAddPhoto = () => {
-    setPhotos((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        label: `Photo ${prev.length + 1}`,
-        color: 'bg-white border-gray-300',
-      },
-    ]);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(2);
-    console.log('send form');
+    files.forEach((file) => {
+      const objectUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        processed++;
+        if (img.width <= MAX_IMAGE_PX && img.height <= MAX_IMAGE_PX) {
+          validFiles.push(file);
+        } else {
+          alert(
+            ` ${file.name} exceeds the allowed size (maximum 500x500 pixels)`,
+          );
+        }
+        URL.revokeObjectURL(objectUrl);
+        if (processed === files.length) {
+          if (validFiles.length > 0) {
+            handleAddPhotos(validFiles);
+          }
+          inputEl.value = '';
+        }
+      };
+      img.src = objectUrl;
+    });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-2xl p-4 flex flex-col gap-2 h-[630px]"
-    >
-      <h2 className="text-xl font-semibold mb-2">Accommodation</h2>
+    <form onSubmit={(e) => handleSubmit(e, 2)} className="form">
+      <h2 className="title">Accommodation</h2>
       <InputComponent
         value={values.name}
         setValue={(val) => handleChange('name', val)}
@@ -86,32 +104,39 @@ function Accommodation({ setStep }: Props) {
         setType={setType}
         label="Type *"
         options={TYPE_OPTIONS}
+        touched={touched.type}
+        error={errors.type}
+        handleBlur={handleBlur}
       />
       <div>
-        <label className="block text-sm font-medium mb-1">Photos</label>
-        <div className="flex gap-2">
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              className={`w-24 h-20 flex items-center justify-center border rounded ${photo.color}`}
-            >
-              <span className="text-sm font-medium">{photo.label}</span>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={handleAddPhoto}
-            className="w-24 h-20 flex items-center justify-center border rounded border-gray-300 bg-white text-gray-500 hover:bg-gray-100"
-          >
-            Add Photo
-          </button>
+        <label className="block text-sm font-medium mb-1 text-blue-700">
+          Photos
+        </label>
+
+        <div className="flex gap-3 flex-wrap">
+          <PhotoComponent photos={photos} />
+          {photos.length < MAX_PHOTOS && (
+            <>
+              <input
+                id="photo-upload"
+                type="file"
+                accept={ACCEPTED_IMAGE_TYPES}
+                multiple
+                onChange={onFilesSelected}
+                className="hidden"
+              />
+
+              <label
+                htmlFor="photo-upload"
+                className="w-24 h-20 flex items-center justify-center rounded-lg border border-blue-200 bg-white text-blue-700 hover:bg-blue-50 shadow-sm cursor-pointer"
+              >
+                Add Photo
+              </label>
+            </>
+          )}
         </div>
       </div>
-      <button
-        type="submit"
-        className="w-full py-2 rounded bg-blue-100 text-blue-900 font-semibold text-lg mt-2 disabled:opacity-50"
-        disabled={!isValid}
-      >
+      <button type="submit" className="mt-2 btn-primary" disabled={!isValid}>
         Next
       </button>
     </form>

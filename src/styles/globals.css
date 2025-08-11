@@ -22,11 +22,62 @@ body {
   color: var(--foreground);
 }
 
-/* Aseguramos que las fuentes funcionen */
-.font-bangers {
-  font-family: var(--font-bangers);
+.btn-primary {
+  @apply w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-400 to-blue-500 text-white font-semibold shadow-sm hover:from-blue-500 hover:to-blue-600 active:from-blue-600 active:to-blue-700 transition-colors disabled:opacity-50;
+}
+.input {
+  @apply w-full rounded-lg px-3 py-2 mt-1 outline-none border transition-colors shadow-sm;
+}
+.input--ok {
+  @apply border-blue-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100;
+}
+.input--err {
+  @apply border-red-400 focus:border-red-500;
+}
+.field-error {
+  @apply text-xs block min-h-[1.25rem] text-red-500;
 }
 
-.font-poppins {
-  font-family: var(--font-poppins);
+.form {
+  @apply h-[630px] rounded-2xl flex flex-col gap-3;
+}
+
+.photo {
+  @apply w-24 h-20 flex items-center justify-center rounded-lg border shadow-[inset_0_0_0_1px_rgba(59,130,246,0.15)];
+}
+
+.photo-img {
+  @apply object-fill p-2;
+}
+
+.label-input {
+  @apply block text-sm font-medium text-blue-700;
+}
+
+.label-global {
+  @apply font-semibold text-blue-700;
+}
+
+.title {
+  @apply text-xl font-semibold mb-2 text-blue-800;
+}
+
+.container-resume {
+  @apply bg-white/90 backdrop-blur-sm border border-blue-100 rounded-xl p-4 shadow-sm;
+}
+
+.container-resume-title {
+  @apply text-xl font-semibold mb-3 text-blue-800;
+}
+
+/* Animación de paso */
+@keyframes stepFadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

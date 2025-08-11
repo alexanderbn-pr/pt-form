@@ -17,23 +17,21 @@ function InputComponent({
   touched,
   onBlur,
 }: InputComponentProps) {
+  const hasError = Boolean(error && touched);
   return (
     <div>
-      <label className="block text-sm font-medium">{label}</label>
+      <label className="label-input">{label}</label>
       <input
         type="text"
-        className={`w-full border rounded px-2 py-1 mt-1 ${error && touched ? 'border-red-400' : ''}`}
+        className={`input ${hasError ? 'input--err' : 'input--ok'}`}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onBlur}
         required={required}
+        aria-label={label}
       />
-      <span
-        className={`text-xs text-red-500 block min-h-[1.25rem] ${
-          error && touched ? 'visible' : 'invisible'
-        }`}
-      >
-        {error && touched ? error : ''}
+      <span className={`field-error ${hasError ? '' : 'hidden'}`}>
+        {hasError ? error : ''}
       </span>
     </div>
   );
