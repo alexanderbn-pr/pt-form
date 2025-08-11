@@ -1,6 +1,6 @@
 # PT-FORM
 
-Aplicación donde un cliente envia un formulario de una reserva y se muestra un resumen de los datos.
+Custom component donde un cliente envía un formulario de una reserva y se muestra un resumen de los datos.
 
 ## 🚀 Instalación y ejecución
 
@@ -12,12 +12,14 @@ npm run dev         # Ejecuta la aplicación en modo desarrollo
 npm run test        # Ejecuta los tests unitarios
 ```
 
+- Abre `http://localhost:{puerto}/` para ver la app SPA.
+- Abre `http://localhost:{puerto}/custom-form-result.html` para ver el custom element embebible.
 
 ## 🛠️ Tecnologías utilizadas
 
 - **Typescript**
 - **React**
-- **SCSS, TaTailwindCSS**
+- **TailwindCSS**
 - **Vitest** (testing)
 - **@testing-library/react** (testing)
 
@@ -25,10 +27,12 @@ npm run test        # Ejecuta los tests unitarios
 
 ```
 src/
+  assets/
   components/
   hooks/
-  pages/
-  style/
+  styles/
+  validation/
+  wrapper/
   ...
 ```
 
@@ -38,8 +42,12 @@ src/
 
 - ⚡ Se ha utilizado un efecto de transición para el cambio de pantallas.
 
-- 🎨 Para el diseño de la aplicación se ha utilizado tailwind.
+- 🎨 Para el diseño de la aplicación se ha utilizado tailwind. En el archivo global.css de la carpeta syles se han creado algunas clases para reutilizar los css
 
-- ⌨️ Se han exportado los componente a custom-form-result.html para que el componente sea los más plug and play posible.
+- Se ha implementado la funcionalidad correspondiente para la gestión de errores de todos los inputs y para que los datos necesarios y obligatorios sean añadidos.
 
-- 🧪 Se han realizado pruebas unitarias de un componente y de un custom hook de ejemplo.
+- Se ha creado una carpeta para añadir los metodos que comprueban la validación de los diferentes formularios
+
+- ⌨️ Se han exportado el componente principal a un custom-form-result.html para que el componente sea los más plug and play posible.
+
+- 🧪 Se han realizado pruebas unitarias de un componente (accommodation.tsx) y de un custom hook de ejemplo (useOwner.ts).
