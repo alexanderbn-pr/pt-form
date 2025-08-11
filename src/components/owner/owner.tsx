@@ -1,32 +1,29 @@
-import React from 'react';
 import InputComponent from '../../components/inputComponent';
-import { useValidationOwner } from '../../hooks/useValidationOwner';
+import { OwnerValues, OwnerErrors } from '../../types';
 
 interface Props {
-  setStep: (step: number) => void;
+  handleSubmit: (e: React.FormEvent, step: number) => void;
+  values: OwnerValues;
+  errors: OwnerErrors;
+  touched: Partial<Record<keyof OwnerValues, boolean>>;
+  handleChange: (field: keyof OwnerValues, value: string) => void;
+  handleBlur: (field: keyof OwnerValues) => void;
+  isValid: boolean;
 }
 
-function Owner({ setStep }: Props) {
-  const { values, errors, touched, handleChange, handleBlur, isValid } =
-    useValidationOwner({
-      name: '',
-      email: '',
-      phone: '',
-    });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(3);
-    console.log('send form');
-  };
-
+function Owner({
+  handleSubmit,
+  values,
+  errors,
+  touched,
+  handleChange,
+  handleBlur,
+  isValid,
+}: Props) {
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-2xl p-4 flex flex-col gap-2 h-[630px] justify-between"
-    >
+    <form onSubmit={(e) => handleSubmit(e, 3)} className="form">
       <section>
-        <h2 className="text-xl font-semibold mb-2">Owner</h2>
+        <h2 className="title">Owner</h2>
         <InputComponent
           value={values.name}
           setValue={(val) => handleChange('name', val)}
@@ -55,11 +52,7 @@ function Owner({ setStep }: Props) {
           onBlur={() => handleBlur('phone')}
         />
       </section>
-      <button
-        type="submit"
-        className="w-full py-2 rounded bg-blue-100 text-blue-900 font-semibold text-lg mt-2 disabled:opacity-50"
-        disabled={!isValid}
-      >
+      <button type="submit" className="mt-2 btn-primary" disabled={!isValid}>
         Submit
       </button>
     </form>
